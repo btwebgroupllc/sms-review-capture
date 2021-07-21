@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import "./App.css";
 import useAuth from "./hooks/useAuth";
@@ -9,6 +9,15 @@ import Login from "./Auth/Login";
 
 function App() {
   const [user, setUser] = useAuth();
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isLoading) {
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+    }
+  }, []);
 
   if (user) {
     return (
@@ -25,11 +34,17 @@ function App() {
   }
   return (
     <div className="login">
-      <Switch>
-        <Redirect exact path="/" to="/login" />
-        <Redirect exact path="/home" to="/login" />
-        <Route path="/login" component={Login} />
-      </Switch>
+      {isLoading ? (
+        "Loading"
+      ) : (
+        <>
+          <Switch>
+            <Redirect exact path="/" to="/login" />
+            <Redirect exact path="/home" to="/login" />
+            <Route path="/login" component={Login} />
+          </Switch>
+        </>
+      )}
     </div>
   );
 }
