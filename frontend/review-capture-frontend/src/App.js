@@ -2,17 +2,18 @@ import { useState, useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import "./App.css";
 import useAuth from "./hooks/useAuth";
+import UserContext from "./contexts/UserContext";
 
 //page imports
 import Home from "./pages/Home";
 import Login from "./Auth/Login";
 
-function App() {
+const App = () => {
   const [user, setUser] = useAuth();
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading && !user) {
       setTimeout(() => {
         setLoading(false);
       }, 2000);
@@ -23,11 +24,13 @@ function App() {
     return (
       <>
         <div className="App">
-          <Switch>
-            <Redirect exact path="/" to="/home" />
-            <Redirect exact path="/login" to="/home" />
-            <Route path="/home" component={Home} />
-          </Switch>
+          <UserContext.Provider value={{ user, setUser }}>
+            <Switch>
+              <Redirect exact path="/" to="/home" />
+              <Redirect exact path="/login" to="/home" />
+              <Route path="/home" component={Home} />
+            </Switch>
+          </UserContext.Provider>
         </div>
       </>
     );
@@ -47,6 +50,6 @@ function App() {
       )}
     </div>
   );
-}
+};
 
 export default App;

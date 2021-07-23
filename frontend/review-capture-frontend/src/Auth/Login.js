@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import firebase from "../firebase";
 import { toast, ToastContainer } from "react-toastify";
+import "../styles/Login.css";
 
-function Login() {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -22,23 +23,29 @@ function Login() {
 
   return (
     <div className="login-screen">
-      <h3>Please login</h3>
+      <div className="heading">
+        <h3>Please login</h3>
+      </div>
 
-      <input
-        value={email}
-        placeholder="Email Address"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        value={password}
-        placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleLogin}>Login</button>
+      <div className="login-form">
+        <input
+          value={email}
+          placeholder="Email Address"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          value={password}
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button disabled={busy} onClick={handleLogin}>
+          Login
+        </button>
+      </div>
 
       <ToastContainer />
     </div>
   );
-}
+};
 
 export default Login;
