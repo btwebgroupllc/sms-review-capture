@@ -1,0 +1,15 @@
+.responses-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.response {
+  width: 300px;
+  height: 400px;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  border: 1px solid rgb(0, 0, 0, 0.493);
+}

@@ -1,0 +1,9 @@
+.header-links {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.header-links > a {
+  padding: 10px;
+}
