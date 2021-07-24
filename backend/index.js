@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
 app.post("/send-review", (req, res) => {
   console.log(req.body.phoneNumber);
   client.messages.create({
-    body: "Would you mind please leaving us a review? Type GREAT if we did an amazing job! Type OK if we just did alright, and type BAD if we need improvement.",
+    body: req.body.text,
     to: req.body.phoneNumber,
     from: "+18594847377",
   });
