@@ -12,10 +12,10 @@ function Header() {
     <div className="header">
       <div className="header-links">
         <Link to="/home" style={linkStyle}>
-          <a>Home</a>
+          Home
         </Link>
         <Link to="/contacts" style={linkStyle}>
-          <a>Contacts</a>
+          Contacts
         </Link>
         <a>Templates</a>
         <a>Logout</a>
