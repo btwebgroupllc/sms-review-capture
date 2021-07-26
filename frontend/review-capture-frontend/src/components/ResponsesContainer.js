@@ -65,7 +65,7 @@ function ResponsesContainer() {
         />
         <textarea
           placeholder="Input text here..."
-          value={text}
+          value={responseLinks["response-two"]}
           onChange={handleChangeResponseText}
           id="response-two"
         />
@@ -79,10 +79,14 @@ function ResponsesContainer() {
         />
         <textarea
           placeholder="Input text here..."
-          value={text}
+          value={responseLinks["response-three"]}
           onChange={handleChangeResponseText}
           id="response-three"
         />
+      </div>
+      <div className="save-template">
+        <input type="checkbox" id="save-template" />
+        <label htmlFor="save-template">Save as template?</label>
       </div>
     </div>
   );

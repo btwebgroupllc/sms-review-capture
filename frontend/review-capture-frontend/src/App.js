@@ -7,6 +7,10 @@ import UserContext from "./contexts/UserContext";
 //page imports
 import Home from "./pages/Home";
 import Login from "./Auth/Login";
+import Contacts from "./pages/Contacts";
+
+//header
+import Header from "./components/Header";
 
 const App = () => {
   const [user, setUser] = useAuth();
@@ -25,10 +29,12 @@ const App = () => {
       <>
         <div className="App">
           <UserContext.Provider value={{ user, setUser }}>
+            <Header />
             <Switch>
               <Redirect exact path="/" to="/home" />
               <Redirect exact path="/login" to="/home" />
               <Route path="/home" component={Home} />
+              <Route path="/contacts" component={Contacts} />
             </Switch>
           </UserContext.Provider>
         </div>

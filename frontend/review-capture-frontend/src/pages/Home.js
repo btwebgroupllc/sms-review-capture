@@ -8,8 +8,6 @@ const Home = () => {
   const [text, setText] = useState("");
   return (
     <div className="home">
-      {/*Header component for logout/menu options */}
-      <Header />
       <h1>Welcome to Review Software</h1>
       {/*Component for first name and phone number */}
       <ResponseContext.Provider value={{ text, setText }}>
