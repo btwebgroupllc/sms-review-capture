@@ -24,9 +24,9 @@ function Contacts() {
     <div className="contacts">
       <h1>Contacts Page</h1>
       {contacts.map((contact) => (
-        <>
+        <div key={contact.phone_number}>
           {contact.first_name} - {contact.phone_number}
-        </>
+        </div>
       ))}
     </div>
   );
