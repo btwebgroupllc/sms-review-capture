@@ -5,6 +5,15 @@ const cors = require("cors");
 const PORT = 88;
 const path = require("path");
 
+const admin = require("firebase-admin");
+
+const serviceAccount = require("./sms-review-capture-firebase-adminsdk-hxlhe-f2060b0799.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
+const db = admin.firestore();
 require("dotenv").config();
 
 const accountSid = process.env.ACCOUNT_SID;
@@ -12,6 +21,7 @@ const accountToken = process.env.ACCOUNT_TOKEN;
 
 const client = require("twilio")(accountSid, accountToken);
 const MessagingResponse = require("twilio").twiml.MessagingResponse;
+const { response } = require("express");
 
 const app = express();
 
@@ -29,32 +39,78 @@ app.get("/", (req, res) => {
   res.render("index", { phoneNumber: "123" });
 });
 
-app.post("/send-review", (req, res) => {
+app.post("/new-campaign", async (req, res) => {
+  const responseString = "responseString";
+  const responseText = "responseText";
   console.log(req.body.phoneNumber);
   client.messages.create({
     body: req.body.text,
     to: req.body.phoneNumber,
     from: "+18594847377",
   });
+
+  const docRef = await db
+    .collection("campaigns")
+    .where("status", "==", "active")
+    .get();
+
+  docRef.forEach((doc) => {
+    db.collection("campaigns").doc(doc.id).update({
+      status: "inactive",
+    });
+  });
+
+  db.collection("campaigns").add({
+    phone_number: "+18594847377",
+    campaign_id: "12345",
+    user_id: req.body.userId,
+    initial_text: req.body.text,
+    response_one: {
+      response_string: req.body.responseOne[responseString],
+      response_text: req.body.responseOne[responseText],
+    },
+    response_two: {
+      response_string: req.body.responseTwo[responseString],
+      response_text: req.body.responseTwo[responseText],
+    },
+    response_three: {
+      response_string: req.body.responseThree[responseString],
+      response_text: req.body.responseThree[responseText],
+    },
+    status: "active",
+  });
   res.json({ status: "This is the route to send the initial SMS" });
 });
 
-app.post("/review-response", (req, res) => {
+app.post("/review-response", async (req, res) => {
   const twiml = new MessagingResponse();
+  let responseOne;
+  let responseTwo;
+  let responseThree;
   const responseString = req.body.Body;
+  const docRef = await db
+    .collection("campaigns")
+    .where("status", "==", "active")
+    .where("phone_number", "==", `${req.body.To}`)
+    .get();
 
-  if (responseString.toUpperCase().includes("GREAT")) {
-    twiml.message(
-      "That's great to hear! Would you mind taking the time to review us on Google? {{Paste Google link here.}}"
-    );
-  } else if (responseString.toUpperCase().includes("OK")) {
-    twiml.message(
-      "Would you mind taking the time to let us know what we could do to improve? --> {{Feedback link here}}"
-    );
-  } else if (responseString.toUpperCase().includes("BAD")) {
-    twiml.message(
-      "We're sorry, we would love to know what we could do to improve. --> {{Feedback link here}}"
-    );
+  docRef.forEach((doc) => {
+    responseOne = doc.data().response_one;
+    responseTwo = doc.data().response_two;
+    responseThree = doc.data().response_three;
+    console.log(responseOne, responseTwo, responseThree);
+  });
+
+  if (responseString.toUpperCase().includes(responseOne.response_string)) {
+    twiml.message(`${responseOne.response_text}`);
+  } else if (
+    responseString.toUpperCase().includes(responseTwo.response_string)
+  ) {
+    twiml.message(`${responseTwo.response_text}`);
+  } else if (
+    responseString.toUpperCase().includes(responseThree.response_string)
+  ) {
+    twiml.message(`${responseThree.response_text}`);
   } else {
     twiml.message(
       "We're sorry, we didn't recognize that command. Please enter one of the following...GREAT, OK, BAD"

@@ -3,6 +3,7 @@ import axios from "axios";
 import ResponseContext from "../contexts/ResponseContext";
 import { handleAddContact } from "../utils/utils";
 import UserContext from "../contexts/UserContext";
+import ResponseValuesContext from "../contexts/ResponseValuesContext";
 
 function SendText() {
   const { user } = useContext(UserContext);
@@ -10,11 +11,25 @@ function SendText() {
   const [firstName, setFirstName] = useState("");
   const [isAddContact, setIsAddContact] = useState(false);
   const { text } = useContext(ResponseContext);
+  const { responseValues } = useContext(ResponseValuesContext);
   const handleSubmit = async () => {
-    const response = await axios.post("http://localhost:88/send-review", {
+    const response = await axios.post("http://localhost:88/new-campaign", {
       phoneNumber: phoneNumber,
       name: firstName,
       text: text,
+      userId: user.uid,
+      responseOne: {
+        responseString: responseValues["response-string-one"],
+        responseText: responseValues["response-one"],
+      },
+      responseTwo: {
+        responseString: responseValues["response-string-two"],
+        responseText: responseValues["response-two"],
+      },
+      responseThree: {
+        responseString: responseValues["response-string-three"],
+        responseText: responseValues["response-three"],
+      },
     });
 
     if (isAddContact) {

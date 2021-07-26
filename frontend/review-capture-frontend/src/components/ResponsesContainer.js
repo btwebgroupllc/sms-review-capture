@@ -1,9 +1,13 @@
 import React, { useContext, useState } from "react";
 import "../styles/ResponseContainer.css";
 import ResponseContext from "../contexts/ResponseContext";
+import ResponseValuesContext from "../contexts/ResponseValuesContext";
 
 function ResponsesContainer() {
   const { text, setText } = useContext(ResponseContext);
+  const { responseValues, setResponseValues } = useContext(
+    ResponseValuesContext
+  );
   const [responseStrings, setResponseStrings] = useState({
     "response-string-one": "",
     "response-string-two": "",
@@ -16,21 +20,21 @@ function ResponsesContainer() {
   });
 
   const handleChangeResponseString = (e) => {
-    setResponseStrings((previousValues) => ({
+    setResponseValues((previousValues) => ({
       ...previousValues,
       [e.target.id]: e.target.value,
     }));
 
-    console.log(responseStrings);
+    console.log(responseValues);
   };
 
   const handleChangeResponseText = (e) => {
-    setResponseLinks((previousValues) => ({
+    setResponseValues((previousValues) => ({
       ...previousValues,
       [e.target.id]: e.target.value,
     }));
 
-    console.log(responseLinks);
+    console.log(responseValues);
   };
   return (
     <div className="responses-container">
@@ -51,7 +55,7 @@ function ResponsesContainer() {
         />
         <textarea
           placeholder="Input text here..."
-          value={responseLinks["response-one"]}
+          value={responseValues["response-one"]}
           id="response-one"
           onChange={handleChangeResponseText}
         />
@@ -65,7 +69,7 @@ function ResponsesContainer() {
         />
         <textarea
           placeholder="Input text here..."
-          value={responseLinks["response-two"]}
+          value={responseValues["response-two"]}
           onChange={handleChangeResponseText}
           id="response-two"
         />
@@ -79,7 +83,7 @@ function ResponsesContainer() {
         />
         <textarea
           placeholder="Input text here..."
-          value={responseLinks["response-three"]}
+          value={responseValues["response-three"]}
           onChange={handleChangeResponseText}
           id="response-three"
         />
