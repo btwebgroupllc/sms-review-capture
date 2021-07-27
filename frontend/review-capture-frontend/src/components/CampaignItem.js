@@ -32,9 +32,11 @@ function SimpleDialog(props) {
       fullWidth
     >
       <DialogTitle id="simple-dialog-title">People in Campaign </DialogTitle>
-      {campaign.phoneNumbers.map((numbers) => (
-        <>{numbers}</>
-      ))}
+      <div style={{ padding: "20px" }}>
+        {campaign.phoneNumbers.map((numbers) => (
+          <>{numbers}</>
+        ))}
+      </div>
     </Dialog>
   );
 }
