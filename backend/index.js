@@ -112,9 +112,7 @@ app.post("/review-response", async (req, res) => {
   ) {
     twiml.message(`${responseThree.response_text}`);
   } else {
-    twiml.message(
-      "We're sorry, we didn't recognize that command. Please enter one of the following...GREAT, OK, BAD"
-    );
+    twiml.message("We're sorry, we didn't recognize that command.");
   }
 
   res.writeHead(200, { "Content-Type": "text/xml" });
