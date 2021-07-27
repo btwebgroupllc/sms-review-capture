@@ -30,6 +30,7 @@ function SendText() {
         responseString: responseValues["response-string-three"],
         responseText: responseValues["response-three"],
       },
+      phoneNumbers: `+1${phoneNumber}`,
     });
 
     if (isAddContact) {

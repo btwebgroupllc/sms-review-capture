@@ -27,10 +27,10 @@ export async function getUserContacts(userId) {
   return docRef.docs;
 }
 
-export async function getCurrentCampaign(userId) {
+export async function getMostRecentCampaign(userId) {
   const docs = [];
   const docRef = await firebase.db
-    .collection("campaigns")
+    .collection("new_campaigns")
     .where("status", "==", "active")
     .where("user_id", "==", `${userId}`)
     .get();
@@ -40,4 +40,19 @@ export async function getCurrentCampaign(userId) {
   });
 
   return docs[0];
+}
+
+export async function getActiveCampaigns(userId) {
+  const docs = [];
+  const docRef = await firebase.db
+    .collection("new_campaigns")
+    .where("status", "==", "active")
+    .where("user_id", "==", `${userId}`)
+    .get();
+
+  docRef.forEach((doc) => {
+    docs.push(doc.data());
+  });
+
+  return docs;
 }

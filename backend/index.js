@@ -40,28 +40,19 @@ app.get("/", (req, res) => {
 });
 
 app.post("/new-campaign", async (req, res) => {
+  const tempPhoneNums = [];
   const responseString = "responseString";
   const responseText = "responseText";
   console.log(req.body.phoneNumber);
+  tempPhoneNums.push(`+1${req.body.phoneNumber}`);
   client.messages.create({
     body: req.body.text,
     to: req.body.phoneNumber,
-    from: "+18594847377",
+    from: "+18592093414",
   });
 
-  const docRef = await db
-    .collection("campaigns")
-    .where("status", "==", "active")
-    .get();
-
-  docRef.forEach((doc) => {
-    db.collection("campaigns").doc(doc.id).update({
-      status: "inactive",
-    });
-  });
-
-  db.collection("campaigns").add({
-    phone_number: "+18594847377",
+  db.collection("new_campaigns").add({
+    phone_number: "+18592093414",
     campaign_id: "12345",
     user_id: req.body.userId,
     initial_text: req.body.text,
@@ -77,6 +68,7 @@ app.post("/new-campaign", async (req, res) => {
       response_string: req.body.responseThree[responseString],
       response_text: req.body.responseThree[responseText],
     },
+    phoneNumbers: tempPhoneNums,
     status: "active",
   });
   res.json({ status: "This is the route to send the initial SMS" });
@@ -84,21 +76,30 @@ app.post("/new-campaign", async (req, res) => {
 
 app.post("/review-response", async (req, res) => {
   const twiml = new MessagingResponse();
-  let responseOne;
-  let responseTwo;
-  let responseThree;
+  let responseOne = "";
+  let responseTwo = "";
+  let responseThree = "";
   const responseString = req.body.Body;
+  const phoneNumber = req.body.From;
+  console.log(phoneNumber);
   const docRef = await db
-    .collection("campaigns")
+    .collection("new_campaigns")
     .where("status", "==", "active")
     .where("phone_number", "==", `${req.body.To}`)
+    .where("phoneNumbers", "array-contains", `${phoneNumber}`)
     .get();
 
   docRef.forEach((doc) => {
-    responseOne = doc.data().response_one;
-    responseTwo = doc.data().response_two;
-    responseThree = doc.data().response_three;
-    console.log(responseOne, responseTwo, responseThree);
+    if (
+      doc.data().response_one.response_string === req.body.Body ||
+      doc.data().response_two.response_string === req.body.Body ||
+      doc.data().response_three.response_string === req.body.Body
+    ) {
+      responseOne = doc.data().response_one;
+      responseTwo = doc.data().response_two;
+      responseThree = doc.data().response_three;
+      console.log(responseOne, responseTwo, responseThree);
+    }
   });
 
   if (responseString.toUpperCase().includes(responseOne.response_string)) {

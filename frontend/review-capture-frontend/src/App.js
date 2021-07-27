@@ -8,6 +8,7 @@ import UserContext from "./contexts/UserContext";
 import Home from "./pages/Home";
 import Login from "./Auth/Login";
 import Contacts from "./pages/Contacts";
+import Campaigns from "./pages/Campaigns";
 
 //header
 import Header from "./components/Header";
@@ -35,6 +36,7 @@ const App = () => {
               <Redirect exact path="/login" to="/home" />
               <Route path="/home" component={Home} />
               <Route path="/contacts" component={Contacts} />
+              <Route path="/campaigns" component={Campaigns} />
             </Switch>
           </UserContext.Provider>
         </div>

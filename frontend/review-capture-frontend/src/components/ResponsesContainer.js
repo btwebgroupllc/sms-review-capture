@@ -3,7 +3,7 @@ import "../styles/ResponseContainer.css";
 import ResponseContext from "../contexts/ResponseContext";
 import ResponseValuesContext from "../contexts/ResponseValuesContext";
 import UserContext from "../contexts/UserContext";
-import { getCurrentCampaign } from "../utils/utils";
+import { getMostRecentCampaign } from "../utils/utils";
 function ResponsesContainer() {
   const { text, setText } = useContext(ResponseContext);
   const { user } = useContext(UserContext);
@@ -18,7 +18,7 @@ function ResponsesContainer() {
   }, []);
 
   const handleCampaignSetup = async () => {
-    const activeCampaign = await getCurrentCampaign(user.uid);
+    const activeCampaign = await getMostRecentCampaign(user.uid);
     setText(activeCampaign.initial_text);
     setResponseValues((previousValues) => ({
       ...previousValues,

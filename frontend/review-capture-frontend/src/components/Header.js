@@ -17,6 +17,9 @@ function Header() {
         <Link to="/contacts" style={linkStyle}>
           Contacts
         </Link>
+        <Link to="/campaigns" style={linkStyle}>
+          Campaigns
+        </Link>
         <a>Templates</a>
         <a>Logout</a>
       </div>
