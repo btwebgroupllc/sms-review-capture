@@ -7,7 +7,7 @@ const path = require("path");
 
 const admin = require("firebase-admin");
 
-const serviceAccount = require("./sms-review-capture-firebase-adminsdk-hxlhe-9dd43c85c9.json");
+const serviceAccount = require("./sms-review-capture-firebase-adminsdk-hxlhe-f2060b0799.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
