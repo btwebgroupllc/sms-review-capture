@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const PORT = 88;
 const path = require("path");
+const { uuid } = require("uuidv4");
 
 const admin = require("firebase-admin");
 
@@ -53,7 +54,7 @@ app.post("/new-campaign", async (req, res) => {
 
   db.collection("new_campaigns").add({
     phone_number: "+18592093414",
-    campaign_id: "12345",
+    campaign_id: uuid(),
     user_id: req.body.userId,
     initial_text: req.body.text,
     response_one: {
