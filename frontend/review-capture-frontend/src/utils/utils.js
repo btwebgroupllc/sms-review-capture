@@ -26,3 +26,18 @@ export async function getUserContacts(userId) {
 
   return docRef.docs;
 }
+
+export async function getCurrentCampaign(userId) {
+  const docs = [];
+  const docRef = await firebase.db
+    .collection("campaigns")
+    .where("status", "==", "active")
+    .where("user_id", "==", `${userId}`)
+    .get();
+
+  docRef.forEach((doc) => {
+    docs.push(doc.data());
+  });
+
+  return docs[0];
+}
