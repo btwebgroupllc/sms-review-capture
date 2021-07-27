@@ -1,7 +1,55 @@
-import React from "react";
-import { Card, CardContent } from "@material-ui/core";
+import React, { useState } from "react";
+import {
+  Card,
+  CardContent,
+  Button,
+  Dialog,
+  DialogTitle,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles({});
+
+function SimpleDialog(props) {
+  const classes = useStyles();
+
+  const { onClose, open, campaign } = props;
+
+  const handleClose = () => {
+    onClose(false);
+  };
+
+  const handleListItemClick = (value) => {
+    onClose(value);
+  };
+
+  return (
+    <Dialog
+      onClose={handleClose}
+      aria-labelledby="simple-dialog-title"
+      open={open}
+      maxWidth="lg"
+      fullWidth
+    >
+      <DialogTitle id="simple-dialog-title">People in Campaign </DialogTitle>
+      {campaign.phoneNumbers.map((numbers) => (
+        <>{numbers}</>
+      ))}
+    </Dialog>
+  );
+}
 
 function CampaignItem({ campaign }) {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+  };
+
   return (
     <div
       className="campaign-item"
@@ -27,10 +75,17 @@ function CampaignItem({ campaign }) {
             }}
           >
             <p>View More Info</p>
-            <p>View People In Campaign</p>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleClickOpen}
+            >
+              View People in Campaign
+            </Button>
           </div>
         </CardContent>
       </Card>
+      <SimpleDialog open={open} onClose={handleClose} campaign={campaign} />
     </div>
   );
 }
