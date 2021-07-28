@@ -6,7 +6,7 @@ import UserContext from "../contexts/UserContext";
 import ResponseValuesContext from "../contexts/ResponseValuesContext";
 import SendListContext from "../contexts/SendListContext";
 import Button from "@material-ui/core/Button";
-import { Dialog, DialogTitle } from "@material-ui/core";
+import { Dialog, DialogTitle, TextField } from "@material-ui/core";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -73,17 +73,23 @@ function SendText() {
 
   return (
     <div className="send-text">
-      <input
+      <TextField
         value={firstName}
-        placeholder="Enter First Name: "
+        label="Enter First Name:"
+        variant="outlined"
         onChange={(e) => setFirstName(e.target.value)}
+        size="small"
       />
-      <input
+      <TextField
         value={phoneNumber}
-        placeholder="Enter Phone Number: "
+        label="Enter Phone Number:"
+        variant="outlined"
+        size="small"
         onChange={(e) => setPhoneNumber(e.target.value)}
       />
-      <button onClick={handleAddToList}>Add</button>
+      <Button variant="contained" onClick={handleAddToList} color="primary">
+        Add
+      </Button>
       <input
         type="checkbox"
         name="add-contact"

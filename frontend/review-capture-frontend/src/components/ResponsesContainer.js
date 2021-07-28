@@ -3,11 +3,11 @@ import "../styles/ResponseContainer.css";
 import ResponseContext from "../contexts/ResponseContext";
 import ResponseValuesContext from "../contexts/ResponseValuesContext";
 import UserContext from "../contexts/UserContext";
+import { TextField, Card, CardContent, CardHeader } from "@material-ui/core";
 import { getMostRecentCampaign } from "../utils/utils";
 function ResponsesContainer() {
   const { text, setText } = useContext(ResponseContext);
   const { user } = useContext(UserContext);
-  const [currentCampaign, setCurrentCampaign] = useState({});
   const { responseValues, setResponseValues } = useContext(
     ResponseValuesContext
   );
@@ -49,63 +49,118 @@ function ResponsesContainer() {
 
     console.log(responseValues);
   };
+
+  const cardStyle = {};
   return (
     <>
       <h3>Your Most Recent Campaign </h3>
       <div className="responses-container">
         <div className="response text-content">
-          <h4>What would you like the text to say?</h4>
-          <textarea
-            placeholder="Input text here..."
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
+          <Card style={cardStyle}>
+            <CardHeader title="What would you like the text to say?" />
+            <CardContent>
+              <TextField
+                label="Input text here..."
+                variant="outlined"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                fullWidth
+                multiline
+                rows={6}
+                maxRows={10}
+                focused
+              />
+            </CardContent>
+          </Card>
         </div>
         <div className="response response-1">
-          <h4>Response 1</h4>
-          <input
-            placeholder="Response String..."
-            id="response-string-one"
-            onChange={handleChangeResponseString}
-            value={responseValues["response-string-one"]}
-          />
-          <textarea
-            placeholder="Input text here..."
-            value={responseValues["response-one"]}
-            id="response-one"
-            onChange={handleChangeResponseText}
-          />
+          <Card>
+            <CardHeader title="Response 1" />
+            <CardContent>
+              <TextField
+                label="Response String"
+                variant="outlined"
+                id="response-string-one"
+                onChange={handleChangeResponseString}
+                value={responseValues["response-string-one"]}
+                fullWidth
+                focused
+              />
+              <div style={{ padding: "10px" }} />
+              <TextField
+                label="Input text here..."
+                value={responseValues["response-one"]}
+                id="response-one"
+                onChange={handleChangeResponseText}
+                fullWidth
+                multiline
+                rows={6}
+                maxRows={10}
+                variant="outlined"
+                focused
+              />
+            </CardContent>
+          </Card>
         </div>
         <div className="response response-2">
-          <h4>Response 2</h4>
-          <input
-            placeholder="Response String..."
-            id="response-string-two"
-            onChange={handleChangeResponseString}
-            value={responseValues["response-string-two"]}
-          />
-          <textarea
-            placeholder="Input text here..."
-            value={responseValues["response-two"]}
-            onChange={handleChangeResponseText}
-            id="response-two"
-          />
+          <Card>
+            <CardHeader title="Response 2" />
+            <CardContent>
+              <TextField
+                variant="outlined"
+                label="Response String"
+                id="response-string-two"
+                onChange={handleChangeResponseString}
+                value={responseValues["response-string-two"]}
+                fullWidth
+                focused
+              />
+              <div style={{ padding: "10px" }} />
+              <TextField
+                label="Input text here..."
+                focused
+                value={responseValues["response-two"]}
+                onChange={handleChangeResponseText}
+                id="response-two"
+                multiline
+                variant="outlined"
+                fullWidth
+                rows={6}
+                maxRows={10}
+              />
+            </CardContent>
+          </Card>
         </div>
         <div className="response response-3">
-          <h4>Response 3</h4>
-          <input
-            placeholder="Response String..."
-            id="response-string-three"
-            onChange={handleChangeResponseString}
-            value={responseValues["response-string-three"]}
-          />
-          <textarea
-            placeholder="Input text here..."
-            value={responseValues["response-three"]}
-            onChange={handleChangeResponseText}
-            id="response-three"
-          />
+          <Card>
+            <CardHeader title="Response 3" />
+            <CardContent>
+              <TextField
+                variant="outlined"
+                label="Response String"
+                id="response-string-three"
+                onChange={handleChangeResponseString}
+                value={responseValues["response-string-three"]}
+                fullWidth
+                focused
+              />
+              <div style={{ padding: "10px" }} />
+              <TextField
+                label="Input text here..."
+                value={responseValues["response-three"]}
+                onChange={handleChangeResponseText}
+                id="response-three"
+                variant="outlined"
+                multiline
+                fullWidth
+                rows={6}
+                maxRows={10}
+                focused
+              />
+            </CardContent>
+          </Card>
         </div>
+
         {/*<div className="response text-content">
           <h4>What to say if they enter an incorrect command?</h4>
           <textarea
