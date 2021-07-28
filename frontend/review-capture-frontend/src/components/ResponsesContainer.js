@@ -3,7 +3,7 @@ import "../styles/ResponseContainer.css";
 import ResponseContext from "../contexts/ResponseContext";
 import ResponseValuesContext from "../contexts/ResponseValuesContext";
 import UserContext from "../contexts/UserContext";
-import { getCurrentCampaign } from "../utils/utils";
+import { getMostRecentCampaign } from "../utils/utils";
 function ResponsesContainer() {
   const { text, setText } = useContext(ResponseContext);
   const { user } = useContext(UserContext);
@@ -18,7 +18,7 @@ function ResponsesContainer() {
   }, []);
 
   const handleCampaignSetup = async () => {
-    const activeCampaign = await getCurrentCampaign(user.uid);
+    const activeCampaign = await getMostRecentCampaign(user.uid);
     setText(activeCampaign.initial_text);
     setResponseValues((previousValues) => ({
       ...previousValues,
@@ -28,6 +28,7 @@ function ResponsesContainer() {
       "response-one": activeCampaign.response_one.response_text,
       "response-two": activeCampaign.response_two.response_text,
       "response-three": activeCampaign.response_three.response_text,
+      "error-response": activeCampaign.error_response,
     }));
     console.log(activeCampaign);
   };
@@ -50,7 +51,7 @@ function ResponsesContainer() {
   };
   return (
     <>
-      <h3>Your Current Active campaign </h3>
+      <h3>Your Most Recent Campaign </h3>
       <div className="responses-container">
         <div className="response text-content">
           <h4>What would you like the text to say?</h4>
@@ -105,6 +106,15 @@ function ResponsesContainer() {
             id="response-three"
           />
         </div>
+        {/*<div className="response text-content">
+          <h4>What to say if they enter an incorrect command?</h4>
+          <textarea
+            placeholder="Input text here..."
+            value={responseValues["error-response"]}
+            onChange={handleChangeResponseText}
+            id="error-response"
+          />
+  </div> */}
         <div className="save-template">
           <input type="checkbox" id="save-template" />
           <label htmlFor="save-template">Save as template?</label>

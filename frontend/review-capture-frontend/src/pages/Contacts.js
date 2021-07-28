@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { getUserContacts } from "../utils/utils";
 import UserContext from "../contexts/UserContext";
+import ContactsList from "../components/ContactsList";
 
 function Contacts() {
   const { user } = useContext(UserContext);
@@ -23,11 +24,7 @@ function Contacts() {
   return (
     <div className="contacts">
       <h1>Contacts Page</h1>
-      {contacts.map((contact) => (
-        <div key={contact.phone_number}>
-          {contact.first_name} - {contact.phone_number}
-        </div>
-      ))}
+      <ContactsList contacts={contacts} />
     </div>
   );
 }

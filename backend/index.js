@@ -4,10 +4,11 @@ const morgan = require("morgan");
 const cors = require("cors");
 const PORT = 88;
 const path = require("path");
+const { uuid } = require("uuidv4");
 
 const admin = require("firebase-admin");
 
-const serviceAccount = require("./sms-review-capture-firebase-adminsdk-hxlhe-f2060b0799.json");
+const serviceAccount = require("./sms-review-capture-firebase-adminsdk-hxlhe-9dd43c85c9.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -42,29 +43,22 @@ app.get("/", (req, res) => {
 app.post("/new-campaign", async (req, res) => {
   const responseString = "responseString";
   const responseText = "responseText";
-  console.log(req.body.phoneNumber);
-  client.messages.create({
-    body: req.body.text,
-    to: req.body.phoneNumber,
-    from: "+18594847377",
-  });
+  const tempPhoneNums = [];
 
-  const docRef = await db
-    .collection("campaigns")
-    .where("status", "==", "active")
-    .get();
-
-  docRef.forEach((doc) => {
-    db.collection("campaigns").doc(doc.id).update({
-      status: "inactive",
+  req.body.phoneNumbers.forEach((number) => {
+    client.messages.create({
+      body: req.body.initial_text,
+      to: number.phoneNumber,
+      from: "+18592093414",
     });
+    tempPhoneNums.push(`+1${number.phoneNumber}`);
   });
 
-  db.collection("campaigns").add({
-    phone_number: "+18594847377",
-    campaign_id: "12345",
+  db.collection("new_campaigns").add({
+    phone_number: "+18592093414",
+    campaign_id: uuid(),
     user_id: req.body.userId,
-    initial_text: req.body.text,
+    initial_text: req.body.initial_text,
     response_one: {
       response_string: req.body.responseOne[responseString],
       response_text: req.body.responseOne[responseText],
@@ -77,6 +71,9 @@ app.post("/new-campaign", async (req, res) => {
       response_string: req.body.responseThree[responseString],
       response_text: req.body.responseThree[responseText],
     },
+    phoneNumbers: req.body.phoneNumbers,
+    numberList: tempPhoneNums,
+    //errorResponse: req.body.errorResponse,
     status: "active",
   });
   res.json({ status: "This is the route to send the initial SMS" });
@@ -84,21 +81,33 @@ app.post("/new-campaign", async (req, res) => {
 
 app.post("/review-response", async (req, res) => {
   const twiml = new MessagingResponse();
-  let responseOne;
-  let responseTwo;
-  let responseThree;
+  let responseOne = "";
+  let responseTwo = "";
+  let responseThree = "";
+  let errorResponse = "";
   const responseString = req.body.Body;
+  const phoneNumber = req.body.From;
+  console.log(phoneNumber);
   const docRef = await db
-    .collection("campaigns")
+    .collection("new_campaigns")
     .where("status", "==", "active")
     .where("phone_number", "==", `${req.body.To}`)
+    .where("numberList", "array-contains", `${phoneNumber}`)
     .get();
 
   docRef.forEach((doc) => {
-    responseOne = doc.data().response_one;
-    responseTwo = doc.data().response_two;
-    responseThree = doc.data().response_three;
-    console.log(responseOne, responseTwo, responseThree);
+    console.log(doc.data());
+    if (
+      doc.data().response_one.response_string === req.body.Body.toUpperCase() ||
+      doc.data().response_two.response_string === req.body.Body.toUpperCase() ||
+      doc.data().response_three.response_string === req.body.Body.toUpperCase()
+    ) {
+      responseOne = doc.data().response_one;
+      responseTwo = doc.data().response_two;
+      responseThree = doc.data().response_three;
+      //errorResponse = doc.data().errorResponse;
+      console.log(responseOne, responseTwo, responseThree);
+    }
   });
 
   if (responseString.toUpperCase().includes(responseOne.response_string)) {
@@ -112,7 +121,7 @@ app.post("/review-response", async (req, res) => {
   ) {
     twiml.message(`${responseThree.response_text}`);
   } else {
-    twiml.message("We're sorry, we didn't recognize that command.");
+    twiml.message("We're sorry, we don't recognize this command");
   }
 
   res.writeHead(200, { "Content-Type": "text/xml" });

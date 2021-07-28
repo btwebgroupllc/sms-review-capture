@@ -1,4 +1,5 @@
 import firebase from "../firebase";
+import axios from "axios";
 export async function handleAddContact(userId, contactInfo) {
   if (!userId) return;
   if (!contactInfo) return;
@@ -27,10 +28,10 @@ export async function getUserContacts(userId) {
   return docRef.docs;
 }
 
-export async function getCurrentCampaign(userId) {
+export async function getMostRecentCampaign(userId) {
   const docs = [];
   const docRef = await firebase.db
-    .collection("campaigns")
+    .collection("new_campaigns")
     .where("status", "==", "active")
     .where("user_id", "==", `${userId}`)
     .get();
@@ -40,4 +41,41 @@ export async function getCurrentCampaign(userId) {
   });
 
   return docs[0];
+}
+
+export async function getActiveCampaigns(userId) {
+  const docs = [];
+  const docRef = await firebase.db
+    .collection("new_campaigns")
+    .where("status", "==", "active")
+    .where("user_id", "==", `${userId}`)
+    .get();
+
+  docRef.forEach((doc) => {
+    docs.push(doc.data());
+  });
+
+  return docs;
+}
+
+export async function handleStartCampaign(campaignInfo, isAddContact) {
+  const response = await axios.post(
+    "https://4186dcf02a0e.ngrok.io/new-campaign",
+    campaignInfo
+  );
+
+  /* if (isAddContact) {
+    //handle adding to contacts
+    const contactInfo = {
+      name: campaignInfo.firstName,
+      phoneNumber: campaignInfo.phoneNumber,
+    };
+    await handleAddContact(userId, contactInfo);
+  } */
+
+  if (response.status === 200) {
+    console.log("campaign started");
+  } else {
+    console.log("there has been a problem");
+  }
 }
