@@ -1,4 +1,5 @@
 import firebase from "../firebase";
+import axios from "axios";
 export async function handleAddContact(userId, contactInfo) {
   if (!userId) return;
   if (!contactInfo) return;
@@ -55,4 +56,26 @@ export async function getActiveCampaigns(userId) {
   });
 
   return docs;
+}
+
+export async function handleStartCampaign(campaignInfo, userId, isAddContact) {
+  const response = await axios.post(
+    "http://localhost:88/new-campaign",
+    campaignInfo
+  );
+
+  /* if (isAddContact) {
+    //handle adding to contacts
+    const contactInfo = {
+      name: campaignInfo.firstName,
+      phoneNumber: campaignInfo.phoneNumber,
+    };
+    await handleAddContact(userId, contactInfo);
+  } */
+
+  if (response.status === 200) {
+    console.log("campaign started");
+  } else {
+    console.log("there has been a problem");
+  }
 }

@@ -50,7 +50,7 @@ function ResponsesContainer() {
   };
   return (
     <>
-      <h3>Your Current Active campaign </h3>
+      <h3>Your Most Recent Campaign </h3>
       <div className="responses-container">
         <div className="response text-content">
           <h4>What would you like the text to say?</h4>

@@ -8,7 +8,7 @@ const { uuid } = require("uuidv4");
 
 const admin = require("firebase-admin");
 
-const serviceAccount = require("./sms-review-capture-firebase-adminsdk-hxlhe-f2060b0799.json");
+const serviceAccount = require("./sms-review-capture-firebase-adminsdk-hxlhe-9dd43c85c9.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -41,22 +41,24 @@ app.get("/", (req, res) => {
 });
 
 app.post("/new-campaign", async (req, res) => {
-  const tempPhoneNums = [];
   const responseString = "responseString";
   const responseText = "responseText";
-  console.log(req.body.phoneNumber);
-  tempPhoneNums.push(`+1${req.body.phoneNumber}`);
-  client.messages.create({
-    body: req.body.text,
-    to: req.body.phoneNumber,
-    from: "+18592093414",
+  const tempPhoneNums = [];
+
+  req.body.phoneNumbers.forEach((number) => {
+    client.messages.create({
+      body: req.body.initial_text,
+      to: number.phoneNumber,
+      from: "+18592093414",
+    });
+    tempPhoneNums.push(`+1${number.phoneNumber}`);
   });
 
   db.collection("new_campaigns").add({
     phone_number: "+18592093414",
     campaign_id: uuid(),
     user_id: req.body.userId,
-    initial_text: req.body.text,
+    initial_text: req.body.initial_text,
     response_one: {
       response_string: req.body.responseOne[responseString],
       response_text: req.body.responseOne[responseText],
@@ -69,7 +71,8 @@ app.post("/new-campaign", async (req, res) => {
       response_string: req.body.responseThree[responseString],
       response_text: req.body.responseThree[responseText],
     },
-    phoneNumbers: tempPhoneNums,
+    phoneNumbers: req.body.phoneNumbers,
+    numberList: tempPhoneNums,
     status: "active",
   });
   res.json({ status: "This is the route to send the initial SMS" });
@@ -87,10 +90,11 @@ app.post("/review-response", async (req, res) => {
     .collection("new_campaigns")
     .where("status", "==", "active")
     .where("phone_number", "==", `${req.body.To}`)
-    .where("phoneNumbers", "array-contains", `${phoneNumber}`)
+    .where("numberList", "array-contains", `${phoneNumber}`)
     .get();
 
   docRef.forEach((doc) => {
+    console.log(doc.data());
     if (
       doc.data().response_one.response_string === req.body.Body ||
       doc.data().response_two.response_string === req.body.Body ||
