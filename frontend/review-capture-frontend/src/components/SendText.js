@@ -114,7 +114,7 @@ function SendText() {
       <label htmlFor="contact-checkbox">Add as contact?</label>
       {sendListLength >= 1 && (
         <div style={{ paddingTop: "20px" }}>
-          <Button onClick={handleClickOpen}>View List</Button>
+          <Button onClick={handleClickOpen}>View Numbers in Campaign</Button>
         </div>
       )}
       <ListDialog open={open} onClose={handleClose} list={sendList} />
