@@ -73,6 +73,7 @@ app.post("/new-campaign", async (req, res) => {
     },
     phoneNumbers: req.body.phoneNumbers,
     numberList: tempPhoneNums,
+    errorResponse: req.body.errorResponse,
     status: "active",
   });
   res.json({ status: "This is the route to send the initial SMS" });
@@ -83,6 +84,7 @@ app.post("/review-response", async (req, res) => {
   let responseOne = "";
   let responseTwo = "";
   let responseThree = "";
+  let errorResponse = "";
   const responseString = req.body.Body;
   const phoneNumber = req.body.From;
   console.log(phoneNumber);
@@ -103,6 +105,7 @@ app.post("/review-response", async (req, res) => {
       responseOne = doc.data().response_one;
       responseTwo = doc.data().response_two;
       responseThree = doc.data().response_three;
+      //errorResponse = doc.data().errorResponse;
       console.log(responseOne, responseTwo, responseThree);
     }
   });
@@ -118,7 +121,7 @@ app.post("/review-response", async (req, res) => {
   ) {
     twiml.message(`${responseThree.response_text}`);
   } else {
-    twiml.message("We're sorry, we didn't recognize that command.");
+    twiml.message("We're sorry, we don't recognize this command");
   }
 
   res.writeHead(200, { "Content-Type": "text/xml" });

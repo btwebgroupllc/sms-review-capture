@@ -28,6 +28,7 @@ function ResponsesContainer() {
       "response-one": activeCampaign.response_one.response_text,
       "response-two": activeCampaign.response_two.response_text,
       "response-three": activeCampaign.response_three.response_text,
+      "error-response": activeCampaign.error_response,
     }));
     console.log(activeCampaign);
   };
@@ -105,6 +106,15 @@ function ResponsesContainer() {
             id="response-three"
           />
         </div>
+        {/*<div className="response text-content">
+          <h4>What to say if they enter an incorrect command?</h4>
+          <textarea
+            placeholder="Input text here..."
+            value={responseValues["error-response"]}
+            onChange={handleChangeResponseText}
+            id="error-response"
+          />
+  </div> */}
         <div className="save-template">
           <input type="checkbox" id="save-template" />
           <label htmlFor="save-template">Save as template?</label>

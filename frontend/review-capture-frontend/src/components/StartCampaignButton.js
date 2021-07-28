@@ -29,6 +29,7 @@ function StartCampaignButton() {
         responseString: responseValues["response-string-three"],
         responseText: responseValues["response-three"],
       },
+      errorResponse: responseValues["error-response"],
       status: "active",
     };
 
