@@ -37,7 +37,7 @@ function StartCampaignButton() {
     const submitting = await handleStartCampaign(campaignInfo, user.uid, false);
   };
   return (
-    <div className="start-campaign-button">
+    <div className="start-campaign-button" style={{ paddingBottom: "50px" }}>
       <Button color="primary" variant="contained" onClick={getDataAndSubmit}>
         Start Campaign
       </Button>

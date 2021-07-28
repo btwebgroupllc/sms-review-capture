@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import { Dialog, DialogTitle, TextField } from "@material-ui/core";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { makeStyles } from "@material-ui/core/styles";
 
 function ListDialog(props) {
   const { onClose, open, list } = props;
@@ -38,7 +39,17 @@ function ListDialog(props) {
   );
 }
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& .MuiFilledInput-root": {
+      background: "rgb(255, 255, 255)",
+      marginRight: "10px",
+    },
+  },
+}));
+
 function SendText() {
+  const classes = useStyles();
   const { user } = useContext(UserContext);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -79,11 +90,13 @@ function SendText() {
         variant="outlined"
         onChange={(e) => setFirstName(e.target.value)}
         size="small"
+        className={classes.root}
       />
       <TextField
         value={phoneNumber}
         label="Enter Phone Number:"
         variant="outlined"
+        className={classes.root}
         size="small"
         onChange={(e) => setPhoneNumber(e.target.value)}
       />

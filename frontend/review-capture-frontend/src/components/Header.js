@@ -5,7 +5,7 @@ import firebase from "../firebase";
 
 const linkStyle = {
   textDecoration: "none",
-  color: "blue",
+  color: "white",
 };
 
 async function handleLogout(props) {
@@ -18,8 +18,8 @@ async function handleLogout(props) {
 
 function Header() {
   return (
-    <div className="header">
-      <div className="header-links">
+    <div className="header" style={{ backgroundColor: "#2a9d8f" }}>
+      <div className="header-links" style={{ color: "white" }}>
         <Link to="/home" style={linkStyle}>
           Home
         </Link>

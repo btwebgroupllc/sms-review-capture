@@ -5,6 +5,7 @@ import ResponseValuesContext from "../contexts/ResponseValuesContext";
 import UserContext from "../contexts/UserContext";
 import { TextField, Card, CardContent, CardHeader } from "@material-ui/core";
 import { getMostRecentCampaign } from "../utils/utils";
+import SendText from "./SendText";
 function ResponsesContainer() {
   const { text, setText } = useContext(ResponseContext);
   const { user } = useContext(UserContext);
@@ -52,8 +53,14 @@ function ResponsesContainer() {
 
   const cardStyle = {};
   return (
-    <>
-      <h3>Your Most Recent Campaign </h3>
+    <div
+      style={{
+        marginTop: "50px",
+        paddingTop: "20px",
+      }}
+    >
+      <h2 style={{ color: "white" }}>Start a New Campaign </h2>
+      <SendText />
       <div className="responses-container">
         <div className="response text-content">
           <Card style={cardStyle}>
@@ -175,7 +182,7 @@ function ResponsesContainer() {
           <label htmlFor="save-template">Save as template?</label>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
