@@ -59,7 +59,7 @@ function ResponsesContainer() {
         paddingTop: "20px",
       }}
     >
-      <h2 style={{ color: "white" }}>Start a New Campaign </h2>
+      <h2 style={{ paddingBottom: "20px" }}>Start a New Campaign </h2>
       <SendText />
       <div className="responses-container">
         <div className="response text-content">
