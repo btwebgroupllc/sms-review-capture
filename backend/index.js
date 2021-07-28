@@ -73,7 +73,7 @@ app.post("/new-campaign", async (req, res) => {
     },
     phoneNumbers: req.body.phoneNumbers,
     numberList: tempPhoneNums,
-    errorResponse: req.body.errorResponse,
+    //errorResponse: req.body.errorResponse,
     status: "active",
   });
   res.json({ status: "This is the route to send the initial SMS" });
@@ -98,9 +98,9 @@ app.post("/review-response", async (req, res) => {
   docRef.forEach((doc) => {
     console.log(doc.data());
     if (
-      doc.data().response_one.response_string === req.body.Body ||
-      doc.data().response_two.response_string === req.body.Body ||
-      doc.data().response_three.response_string === req.body.Body
+      doc.data().response_one.response_string === req.body.Body.toUpperCase() ||
+      doc.data().response_two.response_string === req.body.Body.toUpperCase() ||
+      doc.data().response_three.response_string === req.body.Body.toUpperCase()
     ) {
       responseOne = doc.data().response_one;
       responseTwo = doc.data().response_two;

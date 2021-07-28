@@ -58,7 +58,7 @@ export async function getActiveCampaigns(userId) {
   return docs;
 }
 
-export async function handleStartCampaign(campaignInfo, userId, isAddContact) {
+export async function handleStartCampaign(campaignInfo, isAddContact) {
   const response = await axios.post(
     "https://4186dcf02a0e.ngrok.io/new-campaign",
     campaignInfo
