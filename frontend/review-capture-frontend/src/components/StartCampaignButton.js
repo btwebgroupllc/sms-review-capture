@@ -5,12 +5,14 @@ import ResponseContext from "../contexts/ResponseContext";
 import ResponseValuesContext from "../contexts/ResponseValuesContext";
 import { handleStartCampaign } from "../utils/utils";
 import SendListContext from "../contexts/SendListContext";
+import { toast, ToastContainer } from "react-toastify";
 
 function StartCampaignButton() {
   const { user } = useContext(UserContext);
   const { text } = useContext(ResponseContext);
   const { responseValues } = useContext(ResponseValuesContext);
   const { sendList, setSendList } = useContext(SendListContext);
+  const [submitted, setSubmitted] = useState(false);
 
   const getDataAndSubmit = async () => {
     const campaignInfo = {
@@ -35,12 +37,20 @@ function StartCampaignButton() {
 
     console.log(campaignInfo);
     const submitting = await handleStartCampaign(campaignInfo, user.uid, false);
+    setSubmitted(true);
+    toast.success("Your Campaign has been started.");
   };
   return (
     <div className="start-campaign-button" style={{ paddingBottom: "50px" }}>
-      <Button color="primary" variant="contained" onClick={getDataAndSubmit}>
+      <Button
+        disabled={submitted}
+        color="primary"
+        variant="contained"
+        onClick={getDataAndSubmit}
+      >
         Start Campaign
       </Button>
+      <ToastContainer />
     </div>
   );
 }
