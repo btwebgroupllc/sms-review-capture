@@ -81,13 +81,13 @@ app.post("/new-campaign", async (req, res) => {
 
 app.post("/review-response", async (req, res) => {
   const twiml = new MessagingResponse();
-  let responseOne = "";
-  let responseTwo = "";
-  let responseThree = "";
+  let responseOne = "a";
+  let responseTwo = "b";
+  let responseThree = "c";
   let errorResponse = "";
   const responseString = req.body.Body;
   const phoneNumber = req.body.From;
-  console.log(phoneNumber);
+
   const docRef = await db
     .collection("new_campaigns")
     .where("status", "==", "active")
@@ -96,31 +96,47 @@ app.post("/review-response", async (req, res) => {
     .get();
 
   docRef.forEach((doc) => {
-    console.log(doc.data());
+    console.log(
+      doc.data().response_one.response_string.toUpperCase(),
+      req.body.Body.toUpperCase()
+    );
     if (
-      doc.data().response_one.response_string === req.body.Body.toUpperCase() ||
-      doc.data().response_two.response_string === req.body.Body.toUpperCase() ||
-      doc.data().response_three.response_string === req.body.Body.toUpperCase()
+      doc.data().response_one.response_string.toUpperCase() ===
+        req.body.Body.toUpperCase() ||
+      doc.data().response_two.response_string.toUpperCase() ===
+        req.body.Body.toUpperCase() ||
+      doc.data().response_three.response_string.toUpperCase() ===
+        req.body.Body.toUpperCase()
     ) {
       responseOne = doc.data().response_one;
       responseTwo = doc.data().response_two;
       responseThree = doc.data().response_three;
       //errorResponse = doc.data().errorResponse;
-      console.log(responseOne, responseTwo, responseThree);
+      console.log(responseTwo, responseThree);
     }
   });
 
-  if (responseString.toUpperCase().includes(responseOne.response_string)) {
-    twiml.message(`${responseOne.response_text}`);
-  } else if (
-    responseString.toUpperCase().includes(responseTwo.response_string)
-  ) {
-    twiml.message(`${responseTwo.response_text}`);
-  } else if (
-    responseString.toUpperCase().includes(responseThree.response_string)
-  ) {
-    twiml.message(`${responseThree.response_text}`);
-  } else {
+  try {
+    if (
+      responseString
+        .toUpperCase()
+        .includes(responseOne.response_string.toUpperCase())
+    ) {
+      twiml.message(`${responseOne.response_text}`);
+    } else if (
+      responseString
+        .toUpperCase()
+        .includes(responseTwo.response_string.toUpperCase())
+    ) {
+      twiml.message(`${responseTwo.response_text}`);
+    } else if (
+      responseString
+        .toUpperCase()
+        .includes(responseThree.response_string.toUpperCase())
+    ) {
+      twiml.message(`${responseThree.response_text}`);
+    }
+  } catch (error) {
     twiml.message("We're sorry, we don't recognize this command");
   }
 

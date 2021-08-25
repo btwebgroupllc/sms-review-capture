@@ -9,6 +9,7 @@ import SendText from "./SendText";
 function ResponsesContainer() {
   const { text, setText } = useContext(ResponseContext);
   const { user } = useContext(UserContext);
+
   const { responseValues, setResponseValues } = useContext(
     ResponseValuesContext
   );
@@ -19,19 +20,22 @@ function ResponsesContainer() {
   }, []);
 
   const handleCampaignSetup = async () => {
-    const activeCampaign = await getMostRecentCampaign(user.uid);
-    setText(activeCampaign.initial_text);
-    setResponseValues((previousValues) => ({
-      ...previousValues,
-      "response-string-one": activeCampaign.response_one.response_string,
-      "response-string-two": activeCampaign.response_two.response_string,
-      "response-string-three": activeCampaign.response_three.response_string,
-      "response-one": activeCampaign.response_one.response_text,
-      "response-two": activeCampaign.response_two.response_text,
-      "response-three": activeCampaign.response_three.response_text,
-      "error-response": activeCampaign.error_response,
-    }));
-    console.log(activeCampaign);
+    try {
+      const activeCampaign = await getMostRecentCampaign(user.uid);
+      setText(activeCampaign.initial_text);
+      setResponseValues((previousValues) => ({
+        ...previousValues,
+        "response-string-one": activeCampaign.response_one.response_string,
+        "response-string-two": activeCampaign.response_two.response_string,
+        "response-string-three": activeCampaign.response_three.response_string,
+        "response-one": activeCampaign.response_one.response_text,
+        "response-two": activeCampaign.response_two.response_text,
+        "response-three": activeCampaign.response_three.response_text,
+      }));
+      console.log(activeCampaign);
+    } catch (error) {
+      console.log("no current campaigns");
+    }
   };
   const handleChangeResponseString = (e) => {
     setResponseValues((previousValues) => ({
@@ -52,6 +56,7 @@ function ResponsesContainer() {
   };
 
   const cardStyle = {};
+
   return (
     <div
       style={{
@@ -177,10 +182,6 @@ function ResponsesContainer() {
             id="error-response"
           />
   </div> */}
-        <div className="save-template">
-          <input type="checkbox" id="save-template" />
-          <label htmlFor="save-template">Save as template?</label>
-        </div>
       </div>
     </div>
   );

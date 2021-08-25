@@ -5,6 +5,7 @@ import ResponseContext from "../contexts/ResponseContext";
 import ResponseValuesContext from "../contexts/ResponseValuesContext";
 import StartCampaignButton from "../components/StartCampaignButton";
 import SendListContext from "../contexts/SendListContext";
+import CampaignTabPanel from "../components/CampaignTabPanel";
 
 const Home = () => {
   const [text, setText] = useState("");
@@ -31,8 +32,8 @@ const Home = () => {
         >
           <ResponseContext.Provider value={{ text, setText }}>
             {/*Component for the three response options */}
-            <ResponsesContainer />
-            <StartCampaignButton />
+
+            <CampaignTabPanel />
           </ResponseContext.Provider>
         </ResponseValuesContext.Provider>
       </SendListContext.Provider>

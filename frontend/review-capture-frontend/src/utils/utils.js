@@ -60,7 +60,7 @@ export async function getActiveCampaigns(userId) {
 
 export async function handleStartCampaign(campaignInfo, isAddContact) {
   const response = await axios.post(
-    "https://4186dcf02a0e.ngrok.io/new-campaign",
+    "https://6b5561f0c64c.ngrok.io/new-campaign",
     campaignInfo
   );
 
@@ -78,4 +78,33 @@ export async function handleStartCampaign(campaignInfo, isAddContact) {
   } else {
     console.log("there has been a problem");
   }
+}
+
+export async function handleGetTemplates(userId) {
+  if (!userId) return;
+  let temp = [];
+  const docRef = await firebase.db
+    .collection("templates")
+    .where("userId", "==", `${userId}`)
+    .get();
+
+  docRef.forEach((doc) => {
+    temp.push(doc.data());
+  });
+  return temp;
+}
+
+export async function handleAddTemplate(userId, templateInfo) {
+  if (!userId || !templateInfo) return;
+  try {
+    const docRef = await firebase.db.collection("templates").add({
+      userId: userId,
+      templateId: "12234",
+      templateInfo,
+    });
+  } catch (error) {
+    console.error("couldnt add template", error);
+  }
+
+  return;
 }
