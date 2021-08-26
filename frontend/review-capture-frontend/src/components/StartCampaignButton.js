@@ -6,6 +6,7 @@ import ResponseValuesContext from "../contexts/ResponseValuesContext";
 import { handleAddTemplate, handleStartCampaign } from "../utils/utils";
 import SendListContext from "../contexts/SendListContext";
 import { toast, ToastContainer } from "react-toastify";
+import { TextField } from "@material-ui/core";
 
 function StartCampaignButton() {
   const { user } = useContext(UserContext);
@@ -14,6 +15,7 @@ function StartCampaignButton() {
   const { sendList, setSendList } = useContext(SendListContext);
   const [submitted, setSubmitted] = useState(false);
   const [isTemplate, checkIsTemplate] = useState(false);
+  const [templateName, setTemplateName] = useState("");
 
   const getDataAndSubmit = async () => {
     const campaignInfo = {
@@ -36,11 +38,28 @@ function StartCampaignButton() {
     };
 
     console.log(campaignInfo);
-    const submitting = await handleStartCampaign(campaignInfo, user.uid, false);
-    setSubmitted(true);
-    toast.success("Your Campaign has been started.");
+
     if (isTemplate) {
-      await handleAddTemplate(user.uid, campaignInfo);
+      if (templateName.length < 1) {
+        toast.error("please enter a name.");
+      } else {
+        await handleAddTemplate(user.uid, campaignInfo, templateName);
+        const submitting = await handleStartCampaign(
+          campaignInfo,
+          user.uid,
+          false
+        );
+        setSubmitted(true);
+        toast.success("Your Campaign has been started.");
+      }
+    } else {
+      const submitting = await handleStartCampaign(
+        campaignInfo,
+        user.uid,
+        false
+      );
+      setSubmitted(true);
+      toast.success("Your Campaign has been started.");
     }
   };
   return (
@@ -62,6 +81,13 @@ function StartCampaignButton() {
         />
         <label htmlFor="save-template">Save as template?</label>
       </div>
+      {isTemplate && (
+        <TextField
+          placeholder="Template Name:"
+          value={templateName}
+          onChange={(e) => setTemplateName(e.target.value)}
+        />
+      )}
       <ToastContainer />
     </div>
   );

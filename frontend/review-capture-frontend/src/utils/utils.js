@@ -1,5 +1,6 @@
 import firebase from "../firebase";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 export async function handleAddContact(userId, contactInfo) {
   if (!userId) return;
   if (!contactInfo) return;
@@ -94,12 +95,13 @@ export async function handleGetTemplates(userId) {
   return temp;
 }
 
-export async function handleAddTemplate(userId, templateInfo) {
+export async function handleAddTemplate(userId, templateInfo, templateName) {
   if (!userId || !templateInfo) return;
   try {
     const docRef = await firebase.db.collection("templates").add({
       userId: userId,
-      templateId: "12234",
+      templateId: uuidv4(),
+      name: templateName,
       templateInfo,
     });
   } catch (error) {

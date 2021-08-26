@@ -3,6 +3,7 @@ import ResponsesContainer from "./ResponsesContainer";
 import StartCampaignButton from "./StartCampaignButton";
 import { handleGetTemplates } from "../utils/utils";
 import UserContext from "../contexts/UserContext";
+import TemplateSelect from "./TemplateSelect";
 
 const StartFromTemplate = () => {
   const { user } = useContext(UserContext);
@@ -20,7 +21,7 @@ const StartFromTemplate = () => {
   return (
     <div className="start-template">
       <h3>Please select a template from the dropdown below.</h3>
-
+      <TemplateSelect templates={templates} />
       <ResponsesContainer />
       <StartCampaignButton />
     </div>
